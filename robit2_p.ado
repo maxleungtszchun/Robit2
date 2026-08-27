@@ -44,4 +44,5 @@ program robit2_p, rclass
 	}
 
 	ret matrix b = `b'
+	ret local no_cons `no_cons'
 end
