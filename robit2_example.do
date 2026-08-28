@@ -2,16 +2,17 @@ clear all
 set more off
 set linesize 150
 
-// cd "Z:\Desktop\code\stata\"
+cd "C:\Users\ml\Desktop\Robit2\"
+// Z:\Desktop\code\stata\robit2\
 
-run "Z:\Desktop\code\stata\robit2\robit2.ado"
-run "Z:\Desktop\code\stata\robit2\robit2_estat.ado"
-run "Z:\Desktop\code\stata\robit2\robit2_lstat.ado"
-run "Z:\Desktop\code\stata\robit2\robit2_lfit.ado"
-run "Z:\Desktop\code\stata\robit2\robit2_lroc.ado"
-run "Z:\Desktop\code\stata\robit2\robit2_margins.ado"
-run "Z:\Desktop\code\stata\robit2\robit2_p.ado"
-run "Z:\Desktop\code\stata\robit2\get_Xb.mata"
+run "robit2.ado"
+run "robit2_estat.ado"
+run "robit2_lstat.ado"
+run "robit2_lfit.ado"
+run "robit2_lroc.ado"
+run "robit2_margins.ado"
+run "robit2_p.ado"
+run "get_Xb.mata"
 
 set obs 1000
 set seed 12345
