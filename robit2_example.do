@@ -28,10 +28,11 @@ gen group = (runiform() < 0.5)
 robit2 y x1 x2, nocnsreport vce(robust) df(9999)
 estat class
 estat gof
+estat gof, group(10)
 estat auc
 robit2_lroc
-// predict robit2p
-// predict robit2xb, xb
+predict robit2p
+predict robit2xb, xb
 robit2_margins, atmeans
 
 
@@ -41,9 +42,10 @@ robit2_margins, atmeans
 probit y x1 x2, vce(robust)
 estat class
 estat gof
+estat gof, group(10)
 estat auc
 lroc
-// predict probitp
-// predict probitxb, xb
+predict probitp
+predict probitxb, xb
 margins, dydx(*) atmeans
 

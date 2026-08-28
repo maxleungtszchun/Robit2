@@ -20,7 +20,7 @@ program robit2_lroc, rclass
 	qui integ roc_mat1 roc_mat2
 	ret scalar area = r(integral) / 100 / 100
 
-	if ("`graph'" == "") {
+	if "`graph'" == "" {
 		local area : di %6.4f return(area)
 		twoway (scatter roc_mat1 roc_mat2, connect(l)) 		///
 			(function y = x, range(0 100) lcolor(black)), 	///
