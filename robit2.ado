@@ -39,7 +39,7 @@ program Estimate, eclass byable(recall)
 	version 11
 	syntax varlist(ts fv) [if] [in]		///
 		[fw pw iw] [,					///
-		df(string)						///
+		df(real 0)						///
 		tau(real 1)						///
 		FROM(string)					///
 		noLOg							/// -ml model- options
@@ -178,22 +178,16 @@ capture noisily break {
 	scalar `ll_0' = `sample_size'*`y_mean'*ln(`y_mean')+`sample_size'*(1-`y_mean')*ln(1-`y_mean')
 
 	cap constraint drop 5 6
-	if "`df'" != "" {
-		cap confirm number `df'
-		if _rc == 0 {
-			if "`df'" <= "0" {
-				display as error "df must be positive."
-				exit
-			}
-			else {
-				constraint 5 _b[df:_cons] = `df'
-			}
-		}
-		else {
-			display as error "df must be real number."
+	if `df' != 0 {
+		if `df' < 0 {
+			display as error "df must be positive."
 			exit
 		}
+		else {
+			constraint 5 _b[df:_cons] = `df'
+		}
 	}
+
 	constraint 6 _b[tau:_cons] = `tau'
 
 	// fit the full model

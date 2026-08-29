@@ -3,7 +3,7 @@ set more off
 set linesize 150
 
 cd "C:\Users\ml\Desktop\Robit2\"
-// Z:\Desktop\code\stata\robit2\
+// cd "Z:\Desktop\code\stata\robit2\"
 
 run "robit2.ado"
 run "robit2_estat.ado"
