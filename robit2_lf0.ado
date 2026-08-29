@@ -31,12 +31,12 @@ program robit2, properties(or svyb svyj svyr swml mi) eclass byable(onecall)
 end
 
 program robit2_mle
-	args todo b lnf
+	args todo b lnfj
 	tempvar df tau xb
 	mleval `df' = `b', eq(1)
 	mleval `tau' = `b', eq(2)
 	mleval `xb' = `b', eq(3)
-	qui replace `lnf' = $ML_y1*ln(1-ttail(`df',`xb'/`tau'))+(1-$ML_y1)*ln(ttail(`df',`xb'/`tau'))
+	qui replace `lnfj' = $ML_y1*ln(1-ttail(`df',`xb'/`tau'))+(1-$ML_y1)*ln(ttail(`df',`xb'/`tau'))
 end
 
 program Estimate, eclass byable(recall)

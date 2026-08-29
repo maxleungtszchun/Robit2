@@ -2,8 +2,8 @@ clear all
 set more off
 set linesize 150
 
-cd "C:\Users\ml\Desktop\Robit2\"
-// cd "Z:\Desktop\code\stata\robit2\"
+// cd "C:\Users\ml\Desktop\Robit2\"
+cd "Z:\Desktop\code\stata\robit2\"
 
 run "robit2_lf0.ado"
 run "robit2_estat.ado"
