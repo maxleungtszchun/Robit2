@@ -5,7 +5,7 @@ set linesize 150
 // cd "C:\Users\ml\Desktop\Robit2\"
 cd "Z:\Desktop\code\stata\robit2\"
 
-run "robit2_lf0.ado"
+run "robit2.ado"
 run "robit2_estat.ado"
 run "robit2_lstat.ado"
 run "robit2_lfit.ado"

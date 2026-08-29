@@ -30,9 +30,30 @@ program robit2, properties(or svyb svyj svyr swml mi) eclass byable(onecall)
 	ereturn local cmdline `"robit2 `0'"'
 end
 
-program robit2_mle
+global ml_evaluator "lf"
+
+program robit2_mle_lf
 	args lnf df tau xb
 	qui replace `lnf' = $ML_y1*ln(1-ttail(`df',`xb'/`tau'))+(1-$ML_y1)*ln(ttail(`df',`xb'/`tau'))
+end
+
+program robit2_mle_lf0
+	args todo b lnfj
+	tempvar df tau xb
+	mleval `df' = `b', eq(1)
+	mleval `tau' = `b', eq(2)
+	mleval `xb' = `b', eq(3)
+	qui replace `lnfj' = $ML_y1*ln(1-ttail(`df',`xb'/`tau'))+(1-$ML_y1)*ln(ttail(`df',`xb'/`tau'))
+end
+
+program robit2_mle_d0
+	args todo b lnf
+	tempvar df tau xb lnfj
+	mleval `df' = `b', eq(1)
+	mleval `tau' = `b', eq(2)
+	mleval `xb' = `b', eq(3)
+	qui gen double `lnfj' = $ML_y1*ln(1-ttail(`df',`xb'/`tau'))+(1-$ML_y1)*ln(ttail(`df',`xb'/`tau'))
+	mlsum `lnf' = `lnfj'
 end
 
 program Estimate, eclass byable(recall)
@@ -191,7 +212,7 @@ capture noisily break {
 	constraint 6 _b[tau:_cons] = `tau'
 
 	// fit the full model
-	ml model lf robit2_mle (df: ) (tau: )	///
+	ml model $ml_evaluator robit2_mle_lf (df: ) (tau: )	///
 		(xb: `lhs' = `rhs',					///
 			`constant'						///
 			`offopt'						///
