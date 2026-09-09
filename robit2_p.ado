@@ -10,7 +10,7 @@ program robit2_p, rclass
 	tempvar intercept
 	gen `intercept' = 1
 
-	tempname eb b
+	tempname eb b b_cons_last
 	matrix `eb' = e(b)
 
 	local length_eb `= colsof(`eb') - 2'
@@ -43,6 +43,20 @@ program robit2_p, rclass
 		gen `namelist' = `temp_name'
 	}
 
+	matrix `b_cons_last' = J(`length_eb', 1, .)
+	matrix `b_cons_last'[`length_eb', 1] = `b'[1, 1]
+	local length_eb_minus_one `length_eb' - 1
+
+	forvalues i = 1/`length_eb' {
+		if `i' != `length_eb' {
+			local j `i' + 1
+			matrix `b_cons_last'[`i', 1] = `b'[`j', 1]
+		}
+	}
+
+	matrix rownames `b_cons_last' = `no_cons' "_cons"
+
 	ret matrix b = `b'
+	ret matrix b_cons_last = `b_cons_last'
 	ret local no_cons `no_cons'
 end

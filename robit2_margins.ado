@@ -2,13 +2,14 @@ program robit2_margins, rclass
 	syntax [, atmeans]
 
 	tempvar Xb fXb
-	tempname result b result_no_cons J J1 J2 x_bar cov fprimeXb V cov_no_cons sd_no_cons combined_result z p
+	tempname result b result_no_cons J J1 J2 x_bar cov fprimeXb V cov_no_cons sd_no_cons combined_result z p b_cons_last
 
 	matrix `V' = e(V)
 	matrix `V' = `V'[3...,3...]
 
 	qui robit2_p `Xb', xb
 	matrix `b' = r(b)
+	matrix `b_cons_last' = r(b_cons_last)
 	local no_cons `"`r(no_cons)'"'
 
 	if "`atmeans'" == "" {
@@ -28,7 +29,7 @@ program robit2_margins, rclass
 		qui mean `no_cons'
 		matrix `x_bar' = (e(b), 1)
 		qui est restore robit2_e
-		matrix `J1' = `fprimeXb' * `b' * `x_bar'
+		matrix `J1' = `fprimeXb' * `b_cons_last' * `x_bar'
 
 		matrix `J' = `J1' + `J2'
 		matrix `cov' = `J' * `V' * `J''
