@@ -40,7 +40,8 @@ program robit2_margins, rclass
 	matrix `result_no_cons' = `result'[2...,1]
 
 	if "`atmeans'" == "" {
-		matlist `result_no_cons'
+		matlist `result_no_cons', border(top bottom) title("Conditional marginal effects") ///
+			cspec(o0& %12s | %10.7g o0&) rspec(--&-)
 	}
 	else {
 		local row_cov `= rowsof(`cov') - 1'
@@ -60,7 +61,7 @@ program robit2_margins, rclass
 		matrix colnames `p' = "P>|z|"
 
 		matrix `combined_result' = `result_no_cons', `sd_no_cons', `z', `p'
-		matlist `combined_result',  border(top bottom) title("Conditional marginal effects") ///
+		matlist `combined_result', border(top bottom) title("Conditional marginal effects") ///
 			cspec(o0& %12s | %10.7g & %12.7g & %5.2f & %5.3f o0&) rspec(--&-)
 		ret matrix sd = `sd_no_cons'
 	}
