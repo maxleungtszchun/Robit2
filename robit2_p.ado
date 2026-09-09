@@ -45,7 +45,6 @@ program robit2_p, rclass
 
 	matrix `b_cons_last' = J(`length_eb', 1, .)
 	matrix `b_cons_last'[`length_eb', 1] = `b'[1, 1]
-	local length_eb_minus_one `length_eb' - 1
 
 	forvalues i = 1/`length_eb' {
 		if `i' != `length_eb' {
