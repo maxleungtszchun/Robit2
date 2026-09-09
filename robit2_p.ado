@@ -45,14 +45,11 @@ program robit2_p, rclass
 
 	matrix `b_cons_last' = J(`length_eb', 1, .)
 	matrix `b_cons_last'[`length_eb', 1] = `b'[1, 1]
-
-	forvalues i = 1/`length_eb' {
-		if `i' != `length_eb' {
+	local length_eb_minus_one = `length_eb' - 1
+	forvalues i = 1/`length_eb_minus_one' {
 			local j `i' + 1
 			matrix `b_cons_last'[`i', 1] = `b'[`j', 1]
-		}
 	}
-
 	matrix rownames `b_cons_last' = `no_cons' "_cons"
 
 	ret matrix b = `b'
