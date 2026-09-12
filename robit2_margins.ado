@@ -25,10 +25,7 @@ program robit2_margins, rclass
 		matrix `J2' = tden(_b[df:_cons], r(mean)/_b[tau:_cons]) * I(`length_b')
 
 		scalar `fprimeXb' = -((_b[df:_cons]+1)*r(mean)/_b[tau:_cons])*tden(_b[df:_cons], r(mean)/_b[tau:_cons])/(_b[df:_cons]+(r(mean)/_b[tau:_cons])^2)
-		est store robit2_e
-		qui mean `no_cons'
-		matrix `x_bar' = (e(b), 1)
-		qui est restore robit2_e
+		matrix `x_bar' = e(mns)
 		matrix `J1' = `fprimeXb' * `b_cons_last' * `x_bar'
 
 		matrix `J' = `J1' + `J2'
