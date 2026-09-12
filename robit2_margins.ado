@@ -2,7 +2,7 @@ program robit2_margins, rclass
 	syntax [, atmeans]
 
 	tempvar Xb fXb
-	tempname result b result_no_cons J J1 J2 x_bar cov fprimeXb V cov_no_cons sd_no_cons combined_result z p b_cons_last
+	tempname result b result_no_cons J J1 J2 x_bar cov fprimeXb V cov_no_cons sd_no_cons combined_result z p b_cons_last lower_ci upper_ci
 
 	matrix `V' = e(V)
 	matrix `V' = `V'[3...,3...]
@@ -61,9 +61,17 @@ program robit2_margins, rclass
 		matrix rownames `p' = `no_cons'
 		matrix colnames `p' = "P>|z|"
 
-		matrix `combined_result' = `result_no_cons', `sd_no_cons', `z', `p'
+		mata: st_matrix("`lower_ci'", st_matrix("`result_no_cons'")-1.96*st_matrix("`sd_no_cons'"))
+		matrix rownames `lower_ci' = `no_cons'
+		matrix colnames `lower_ci' = "[95% Conf"
+
+		mata: st_matrix("`upper_ci'", st_matrix("`result_no_cons'")+1.96*st_matrix("`sd_no_cons'"))
+		matrix rownames `upper_ci' = `no_cons'
+		matrix colnames `upper_ci' = "Interval]"
+
+		matrix `combined_result' = `result_no_cons', `sd_no_cons', `z', `p', `lower_ci', `upper_ci'
 		matlist `combined_result', border(top bottom) title("Conditional marginal effects") ///
-			cspec(o0& %12s | %10.7g & %12.7g & %5.2f & %5.3f o0&) rspec(--&-)
+			cspec(o0& %12s | %10.7g & %12.7g & %5.2f & %5.3f & %10.7g & %10.7g o0&) rspec(--&-)
 		ret matrix sd = `sd_no_cons'
 	}
 	ret matrix ame = `result_no_cons'
