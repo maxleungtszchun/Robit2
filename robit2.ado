@@ -171,7 +171,7 @@ program Estimate, eclass byable(recall)
 			local k `k' + 3
 			matrix `bb' = J(1,`k',0)
 			matrix `bb'[1,`k'] = `b0'
-			matrix `bb'[1,1] = 99999
+			matrix `bb'[1,1] = 0
 			matrix `bb'[1,2] = 1
 			matrix colna `bb' = df:_cons tau:_cons `rhs' xb:_cons
 			local initopt init(`bb')
@@ -180,13 +180,6 @@ program Estimate, eclass byable(recall)
 	else {
 		local initopt `"init(`from')"'
 	}
-
-	// if "`n0'" != "" {
-		// local lf0 = `n1'*ln(1-ttail(99999, `b0'/1))+`n0'*ln(ttail(99999, `b0'/1))
-		// if !missing(`lf0') & "`constant'`offset'" == "" {
-			// local initopt `initopt' lf0(1 `lf0')
-		// }
-	// }
 
 nobreak {
 
@@ -236,7 +229,7 @@ capture noisily break {
 		missing				///
 		nopreserve			///
 		maximize			///
-		search(off)
+		search(on)
 
 } // capture noisily break
 	local rc = c(rc)
