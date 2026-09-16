@@ -171,7 +171,6 @@ program Estimate, eclass byable(recall)
 			local k `k' + 3
 			matrix `bb' = J(1,`k',0)
 			matrix `bb'[1,`k'] = `b0'
-			matrix `bb'[1,1] = 0
 			matrix `bb'[1,2] = 1
 			matrix colna `bb' = df:_cons tau:_cons `rhs' xb:_cons
 			local initopt init(`bb')
@@ -228,8 +227,7 @@ capture noisily break {
 		collinear			///
 		missing				///
 		nopreserve			///
-		maximize			///
-		search(on)
+		maximize
 
 } // capture noisily break
 	local rc = c(rc)
