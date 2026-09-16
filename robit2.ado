@@ -30,30 +30,24 @@ program robit2, properties(or svyb svyj svyr swml mi) eclass byable(onecall)
 	ereturn local cmdline `"robit2 `0'"'
 end
 
-global ml_evaluator "lf"
-
 program robit2_mle_lf
 	args lnf df tau xb
-	qui replace `lnf' = $ML_y1*ln(1-ttail(`df',`xb'/`tau'))+(1-$ML_y1)*ln(ttail(`df',`xb'/`tau'))
+	tempvar p
+	qui gen double `p' = 1-ttail(`df',`xb'/`tau')
+	qui replace `lnf' = $ML_y1*ln(`p')+(1-$ML_y1)*ln(1-`p')
 end
 
 program robit2_mle_lf0
 	args todo b lnfj
-	tempvar df tau xb
+	tempvar df tau xb p
 	mleval `df' = `b', eq(1)
 	mleval `tau' = `b', eq(2)
 	mleval `xb' = `b', eq(3)
-	qui replace `lnfj' = $ML_y1*ln(1-ttail(`df',`xb'/`tau'))+(1-$ML_y1)*ln(ttail(`df',`xb'/`tau'))
-end
+	qui gen double `p' = 1-ttail(`df',`xb'/`tau')
+	qui replace `lnfj' = $ML_y1*ln(`p')+(1-$ML_y1)*ln(1-`p')
 
-program robit2_mle_d0
-	args todo b lnf
-	tempvar df tau xb lnfj
-	mleval `df' = `b', eq(1)
-	mleval `tau' = `b', eq(2)
-	mleval `xb' = `b', eq(3)
-	qui gen double `lnfj' = $ML_y1*ln(1-ttail(`df',`xb'/`tau'))+(1-$ML_y1)*ln(ttail(`df',`xb'/`tau'))
-	mlsum `lnf' = `lnfj'
+	// qui replace `g3' = ($ML_y1-`p')*tden(`df',`xb'/`tau')/(`p'*(1-`p'))
+
 end
 
 program Estimate, eclass byable(recall)
@@ -174,10 +168,12 @@ program Estimate, eclass byable(recall)
 		if "`constant'" == "" {
 			tempname bb
 			local k :list sizeof rhs
-			local ++k
+			local k `k' + 3
 			matrix `bb' = J(1,`k',0)
 			matrix `bb'[1,`k'] = `b0'
-			matrix colna `bb' = `rhs' _cons
+			matrix `bb'[1,1] = 99999
+			matrix `bb'[1,2] = 1
+			matrix colna `bb' = df:_cons tau:_cons `rhs' xb:_cons
 			local initopt init(`bb')
 		}
 	}
@@ -212,7 +208,7 @@ capture noisily break {
 	constraint 6 _b[tau:_cons] = `tau'
 
 	// fit the full model
-	ml model $ml_evaluator robit2_mle_lf (df: ) (tau: )	///
+	ml model lf robit2_mle_lf (df: ) (tau: )	///
 		(xb: `lhs' = `rhs',					///
 			`constant'						///
 			`offopt'						///
@@ -232,8 +228,8 @@ capture noisily break {
 		collinear			///
 		missing				///
 		nopreserve			///
-		maximize
-							// search(off) is removed
+		maximize			///
+		search(off)
 
 } // capture noisily break
 	local rc = c(rc)
