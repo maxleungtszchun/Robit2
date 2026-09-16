@@ -34,7 +34,7 @@ robit2_lroc
 predict robit2p
 predict robit2xb, xb
 robit2_margins, atmeans
-
+linktest
 
 // bysort group: probit y x1 x2, vce(robust) nolog noheader difficult
 // probit y x1 x2 if group == 1, vce(robust) nolog noheader difficult
@@ -48,4 +48,4 @@ lroc
 predict probitp
 predict probitxb, xb
 margins, dydx(*) atmeans
-
+linktest
