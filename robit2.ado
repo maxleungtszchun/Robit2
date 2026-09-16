@@ -31,7 +31,7 @@ program robit2, properties(or svyb svyj svyr swml mi) eclass byable(onecall)
 end
 
 program robit2_mle_lf
-	args lnf df tau xb
+	args lnf xb df tau
 	tempvar p
 	qui gen double `p' = 1-ttail(`df',`xb'/`tau')
 	qui replace `lnf' = $ML_y1*ln(`p')+(1-$ML_y1)*ln(1-`p')
@@ -39,14 +39,14 @@ end
 
 program robit2_mle_lf0
 	args todo b lnfj
-	tempvar df tau xb p
-	mleval `df' = `b', eq(1)
-	mleval `tau' = `b', eq(2)
-	mleval `xb' = `b', eq(3)
+	tempvar xb df tau p
+	mleval `xb' = `b', eq(1)
+	mleval `df' = `b', eq(2)
+	mleval `tau' = `b', eq(3)
 	qui gen double `p' = 1-ttail(`df',`xb'/`tau')
 	qui replace `lnfj' = $ML_y1*ln(`p')+(1-$ML_y1)*ln(1-`p')
 
-	// qui replace `g3' = ($ML_y1-`p')*tden(`df',`xb'/`tau')/(`p'*(1-`p'))
+	// qui replace `g1' = ($ML_y1-`p')*tden(`df',`xb'/`tau')/(`p'*(1-`p'))
 
 end
 
@@ -181,6 +181,13 @@ program Estimate, eclass byable(recall)
 		local initopt `"init(`from')"'
 	}
 
+	// if "`n0'" != "" {
+		// local lf0 = `n1'*ln(1-ttail(99999, `b0'/1))+`n0'*ln(ttail(99999, `b0'/1))
+		// if !missing(`lf0') & "`constant'`offset'" == "" {
+			// local initopt `initopt' lf0(1 `lf0')
+		// }
+	// }
+
 nobreak {
 
 	tempname perfect
@@ -208,12 +215,12 @@ capture noisily break {
 	constraint 6 _b[tau:_cons] = `tau'
 
 	// fit the full model
-	ml model lf robit2_mle_lf (df: ) (tau: )	///
+	ml model lf robit2_mle_lf				///
 		(xb: `lhs' = `rhs',					///
 			`constant'						///
 			`offopt'						///
 			`expopt'						///
-		)									///
+		) (df: ) (tau: )					///
 		`wgt' if `touse',	///
 		constraint(5, 6) 	///
 		`doopt'				///

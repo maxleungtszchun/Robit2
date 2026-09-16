@@ -4,13 +4,14 @@ program robit2_margins, rclass
 	tempvar Xb fXb
 	tempname result b result_no_cons J J1 J2 x_bar cov fprimeXb V cov_no_cons sd_no_cons combined_result z p b_cons_last lower_ci upper_ci
 
-	matrix `V' = e(V)
-	matrix `V' = `V'[3...,3...]
-
 	qui robit2_p `Xb', xb
 	matrix `b' = r(b)
 	matrix `b_cons_last' = r(b_cons_last)
+	local length_b `= rowsof(`b')'
 	local no_cons `"`r(no_cons)'"'
+
+	matrix `V' = e(V)
+	matrix `V' = `V'[1..`length_b',1..`length_b']
 
 	if "`atmeans'" == "" {
 		gen `fXb' = tden(_b[df:_cons], `Xb'/_b[tau:_cons])
@@ -21,7 +22,6 @@ program robit2_margins, rclass
 		qui summ `Xb'
 		matrix `result' = tden(_b[df:_cons], r(mean)/_b[tau:_cons]) * `b'
 
-		local length_b `= rowsof(`b')'
 		matrix `J2' = tden(_b[df:_cons], r(mean)/_b[tau:_cons]) * I(`length_b')
 
 		scalar `fprimeXb' = -((_b[df:_cons]+1)*r(mean)/_b[tau:_cons])*tden(_b[df:_cons], r(mean)/_b[tau:_cons])/(_b[df:_cons]+(r(mean)/_b[tau:_cons])^2)
