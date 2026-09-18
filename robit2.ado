@@ -244,22 +244,10 @@ capture noisily break {
 	// save a title for -Replay- and the name of this command
 	ereturn matrix rules `rules'
 	ereturn matrix mns `mns'
-
 	ereturn scalar r2_p = 1 - e(ll)/`ll_0'
-
 	ereturn local offset `e(offset1)'
 	ereturn local offset1
 	ereturn local title "Robit regression"
-	ereturn local marginsnotok	stdp		///
-					DBeta					///
-					DEviance				///
-					DX2						///
-					DDeviance				///
-					Hat						///
-					Number					///
-					Residuals				///
-					RStandard				///
-					SCore
 	ereturn local predict robit2_p
 	ereturn local estat_cmd robit2_estat
 	ereturn local cmd robit2
@@ -277,7 +265,7 @@ program Replay
 		local title title(Robit regression for grouped data)
 	}
 	_get_diopts diopts, `options'
-	_prefix_display, `table' `header' `rules' `or' `title' `diopts'
+	_prefix_display, `table' `header' `title' `diopts' // `rules' `or' is removed
 end
 
 exit

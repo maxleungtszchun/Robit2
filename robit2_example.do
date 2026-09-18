@@ -2,8 +2,8 @@ clear all
 set more off
 set linesize 150
 
-// cd "C:\Users\ml\Desktop\Robit2\"
-cd "Z:\Desktop\code\stata\robit2\"
+cd "C:\Users\ml\Desktop\Robit2\"
+// cd "Z:\Desktop\code\stata\robit2\"
 
 local adofiles  : dir "." files "*.ado"
 local matafiles : dir "." files "*.mata"
@@ -14,7 +14,7 @@ foreach file in `combinedfiles' {
 }
 
 set obs 1000
-set seed 12345
+set seed 1234
 gen x1 = rnormal()
 gen x2 = rnormal()
 // gen x1 = 0+int((5-0+1)*runiform())
