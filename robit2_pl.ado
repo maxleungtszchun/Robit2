@@ -1,5 +1,5 @@
 program robit2_pl, rclass
-	syntax varlist [, min_val(real 1) max_val(real 10)]
+	syntax varlist [, min_val(real 0.5) max_val(real 10)]
 
 	gettoken lhs rhs : varlist
 
@@ -17,7 +17,7 @@ program robit2_pl, rclass
 	tempfile results
 	qui postfile `memhold' df profile_ll using "`results'", replace
 
-	forvalues df = `min_val'(1)`max_val' {
+	forvalues df = `min_val'(0.5)`max_val' {
 		qui robit2 `lhs' `rhs', df(`df')
 		post `memhold' (`df') (e(ll))
 	}
@@ -26,12 +26,15 @@ program robit2_pl, rclass
 	preserve
 	use "`results'", clear
 
-	sort profile_ll
-	list df profile_ll in `max_val'
+	list
+	local opt = _N
 
-	local opt_df = df[`max_val']
+	sort profile_ll
+	list df profile_ll in `opt'
+
+	local opt_df = df[`opt']
 	tempname opt_profile_ll
-	scalar `opt_profile_ll' = profile_ll[`max_val']
+	scalar `opt_profile_ll' = profile_ll[`opt']
 
 	sort df
 	twoway (line profile_ll df), ///
