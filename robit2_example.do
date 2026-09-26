@@ -22,6 +22,8 @@ gen x2 = rnormal()
 gen y = (0.5 + 0.5*x1 + 0.2*x2 + rt(4) > 0)
 gen group = (runiform() < 0.5)
 
+robit2_pl y x1 x2, min_val(1) max_val(30)
+
 // bysort group: robit2 y x1 x2, nocnsreport vce(robust) df(99999) nolog noheader difficult
 // robit2 y x1 x2 if group == 1, nocnsreport vce(robust) df(99999) nolog noheader difficult
 // robit2 y x1, nocnsreport vce(robust) df(99999) offset(x2)
