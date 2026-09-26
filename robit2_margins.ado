@@ -58,11 +58,13 @@ program robit2_margins, rclass
 		matrix rownames `p' = `no_cons'
 		matrix colnames `p' = "P>|z|"
 
-		mata: st_matrix("`lower_ci'", st_matrix("`result_no_cons'")-1.96*st_matrix("`sd_no_cons'"))
+		local z_value = invnorm(0.975)
+
+		mata: st_matrix("`lower_ci'", st_matrix("`result_no_cons'")-`z_value'*st_matrix("`sd_no_cons'"))
 		matrix rownames `lower_ci' = `no_cons'
 		matrix colnames `lower_ci' = "[95% Conf"
 
-		mata: st_matrix("`upper_ci'", st_matrix("`result_no_cons'")+1.96*st_matrix("`sd_no_cons'"))
+		mata: st_matrix("`upper_ci'", st_matrix("`result_no_cons'")+`z_value'*st_matrix("`sd_no_cons'"))
 		matrix rownames `upper_ci' = `no_cons'
 		matrix colnames `upper_ci' = "Interval]"
 
