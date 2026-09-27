@@ -1,6 +1,7 @@
 clear all
 set more off
 set linesize 150
+set seed 1234
 
 cd "C:\Users\ml\Desktop\Robit2\"
 // cd "Z:\Desktop\code\stata\robit2\"
@@ -14,7 +15,6 @@ foreach file in `combinedfiles' {
 }
 
 program get_data
-	// set seed 1234
 	clear
 	set obs 1000
 	gen x1 = rnormal()
@@ -34,10 +34,10 @@ program sim_df_pl
 	robit2_pl y x1 x2, min_val(0.5) max_val(30)
 end
 
-simulate df_mle = _b[df:_cons], reps(50): sim_df_mle
+simulate df_mle = _b[df:_cons], reps(100): sim_df_mle
 summ df_mle, detail
 
-simulate df_pl = r(opt_df), reps(50): sim_df_pl
+simulate df_pl = r(opt_df), reps(100): sim_df_pl
 summ df_pl, detail
 
 get_data
