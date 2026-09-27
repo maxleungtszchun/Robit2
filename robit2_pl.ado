@@ -13,11 +13,18 @@ program robit2_pl, rclass
 		exit
 	}
 
+	local step = 0.5
+
+	if mod(`max_val'-`min_val', `step') != 0 {
+		display as error "max_val - min_val must be a multiple of 0.5."
+		exit
+	}
+
 	tempname memhold
 	tempfile results
 	qui postfile `memhold' df profile_ll using "`results'", replace
 
-	forvalues df = `min_val'(0.5)`max_val' {
+	forvalues df = `min_val'(`step')`max_val' {
 		qui robit2 `lhs' `rhs', df(`df')
 		post `memhold' (`df') (e(ll))
 	}
