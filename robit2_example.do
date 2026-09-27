@@ -13,21 +13,36 @@ foreach file in `combinedfiles' {
     run "`file'"
 }
 
-set obs 1000
-set seed 1234
-gen x1 = rnormal()
-gen x2 = rnormal()
-// gen x1 = 0+int((5-0+1)*runiform())
-// gen x2 = 0+int((5-0+1)*runiform())
-gen y = (0.5 + 0.5*x1 + 0.2*x2 + rt(4) > 0)
-gen group = (runiform() < 0.5)
+program get_data
+	// set seed 1234
+	clear
+	set obs 1000
+	gen x1 = rnormal()
+	gen x2 = rnormal()
+	// gen x1 = 0+int((5-0+1)*runiform())
+	// gen x2 = 0+int((5-0+1)*runiform())
+	gen y = (0.5 + 0.5*x1 + 0.2*x2 + rt(4) > 0)
+end
 
-robit2_pl y x1 x2, min_val(0.5) max_val(30)
+program sim_df_mle
+	get_data
+	robit2 y x1 x2
+end
 
-// bysort group: robit2 y x1 x2, nocnsreport vce(robust) df(99999) nolog noheader difficult
-// robit2 y x1 x2 if group == 1, nocnsreport vce(robust) df(99999) nolog noheader difficult
-// robit2 y x1, nocnsreport vce(robust) df(99999) offset(x2)
-robit2 y x1 x2, nocnsreport vce(robust) df(99999)
+program sim_df_pl
+	get_data
+	robit2_pl y x1 x2, min_val(0.5) max_val(30)
+end
+
+simulate df_mle = _b[df:_cons], reps(50): sim_df_mle
+summ df_mle, detail
+
+simulate df_pl = r(opt_df), reps(50): sim_df_pl
+summ df_pl, detail
+
+get_data
+robit2_pl y x1 x2, min_val(0.5) max_val(30) graph
+robit2 y x1 x2, nocnsreport vce(robust)
 estat class
 estat gof
 estat gof, group(10)
@@ -38,9 +53,7 @@ predict robit2xb, xb
 robit2_margins, atmeans
 linktest
 
-// bysort group: probit y x1 x2, vce(robust) nolog noheader difficult
-// probit y x1 x2 if group == 1, vce(robust) nolog noheader difficult
-// probit y x1, vce(robust) offset(x2)
+
 probit y x1 x2, vce(robust)
 estat class
 estat gof
