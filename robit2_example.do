@@ -79,8 +79,8 @@ end
 simulate df_mle = _b[df:_cons], reps(100): sim_df_mle
 summ df_mle, detail
 
-// simulate df_pl = r(pl_opt_df), reps(100): sim_df_pl
-// summ df_pl, detail
+simulate df_pl = r(pl_opt_df), reps(100): sim_df_pl
+summ df_pl, detail
 
 simulate df_cv = r(cv_opt_df), reps(100): sim_df_cv
 summ df_cv, detail
