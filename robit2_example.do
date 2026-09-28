@@ -29,7 +29,7 @@ get_data
 
 * Example
 * Estimate the degree of freedom with 10-fold Cross-Validation
-robit2_cv y x1 x2, k(20) min_val(0.5) max_val(20)
+robit2_cv y x1 x2, k(10) min_val(0.5) max_val(20)
 
 * Estimate the degree of freedom with Profile Likelihood
 robit2_pl y x1 x2, min_val(0.5) max_val(20)
