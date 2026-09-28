@@ -38,6 +38,8 @@ program robit2_cv, rclass
 	}
 	matrix colnames avg_r_est_matrix = "df" "RMSE"
 
+	drop _est_est*
+
 	preserve
 	clear
 	qui svmat avg_r_est_matrix
