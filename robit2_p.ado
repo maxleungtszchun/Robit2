@@ -1,5 +1,5 @@
 program robit2_p, rclass
-	syntax namelist(min=1 max=1) [, xb pr]
+	syntax namelist(min=1 max=1) [if] [, xb pr]
 
     if "`namelist'" == "" {
         di as error "Error: You must specify a variable name."

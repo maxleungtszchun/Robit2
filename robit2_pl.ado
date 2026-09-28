@@ -1,5 +1,5 @@
 program robit2_pl, rclass
-	syntax varlist [, min_val(real 0.5) max_val(real 10) graph]
+	syntax varlist [, min_val(real 0.5) max_val(real 10) nograph]
 
 	gettoken lhs rhs : varlist
 
@@ -43,7 +43,7 @@ program robit2_pl, rclass
 	tempname opt_profile_ll
 	scalar `opt_profile_ll' = profile_ll[`opt']
 
-	if "`graph'" != "" {
+	if "`graph'" == "" {
 		sort df
 		twoway (line profile_ll df), ///
 			xline(`opt_df') ///
@@ -53,6 +53,6 @@ program robit2_pl, rclass
 	}
 	restore
 
-	ret scalar opt_df = `opt_df'
-	ret scalar opt_profile_ll = `opt_profile_ll'
+	ret scalar pl_opt_df = `opt_df'
+	ret scalar pl_opt_profile_ll = `opt_profile_ll'
 end
