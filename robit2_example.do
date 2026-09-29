@@ -6,8 +6,6 @@ set seed 1234
 cd "C:\Users\ml\Desktop\Robit2\"
 // cd "Z:\Desktop\code\stata\robit2\"
 
-// test from mac
-
 local adofiles  : dir "." files "*.ado"
 local matafiles : dir "." files "*.mata"
 local combinedfiles : list adofiles | matafiles
