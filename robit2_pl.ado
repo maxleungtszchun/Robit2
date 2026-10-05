@@ -50,9 +50,9 @@ program robit2_pl, rclass
 	if "`graph'" == "" {
 		twoway (line profile_ll df), ///
 			xline(`opt_df') ///
-			title("Profile Likelihood") ///
+			title("Profile Log Likelihood") ///
 			xtitle("df") ///
-			ytitle("Profile Likelihood")
+			ytitle("Profile Log Likelihood")
 	}
 
 	restore
