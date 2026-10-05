@@ -33,24 +33,28 @@ program robit2_pl, rclass
 	preserve
 	use "`results'", clear
 
-	list
 	local opt = _N
 
 	sort profile_ll
-	list df profile_ll in `opt'
+	list df profile_ll in `opt', abbreviate(30)
 
 	local opt_df = df[`opt']
 	tempname opt_profile_ll
 	scalar `opt_profile_ll' = profile_ll[`opt']
 
+	sort df
+	gen pl_ratio_stat = 2 * (`opt_profile_ll' - profile_ll)
+	gen in_conf_set = (pl_ratio_stat <= invchi2(1, 1 - 0.1))
+	list, abbreviate(30)
+
 	if "`graph'" == "" {
-		sort df
 		twoway (line profile_ll df), ///
 			xline(`opt_df') ///
 			title("Profile Likelihood") ///
 			xtitle("df") ///
 			ytitle("Profile Likelihood")
 	}
+
 	restore
 
 	ret scalar pl_opt_df = `opt_df'
